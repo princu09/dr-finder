@@ -1,0 +1,55 @@
+{% extends './basic-admin.html' %}
+{% load static %}
+
+{% block body %}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Pending Users Request</h1>
+    <div class="row">
+
+        {% for i in userData%}
+
+        <!-- Border Left Utilities -->
+        <div class="col-lg-6">
+            <div class="card mb-4 border-left-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <p class="font-weight-bold h5">ID : {{i.id}}</p>
+                        <p class="mb-1 font-weight-bold">Status : <span class="text-danger">{{i.status}}</span></p>
+                        <div class="d-flex">
+                            <form action="/acceptProfile/{{i.id}}/" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="userId" value="{{i.id}}">
+                                <button class="btn btn-sm btn-outline-success mr-2" id="accept">Accept</button>
+                            </form>
+                            <form action="/rejectProfile/{{i.id}}/" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="userId" value="{{i.id}}">
+                                <button class="btn btn-sm btn-outline-danger" id="reject">Reject</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="mb-1">Name : {{i.first_name}} {{i.last_name}}</p>
+                            <p class="mb-1">Username : {{i.username}}</p>
+                        </div>
+                        <div class="col border-left-info">
+                            <p class="mb-1">Field Name : {{i.fieldName}}</p>
+                            <p class="mb-1">Email : {{i.email}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock body%}

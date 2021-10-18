@@ -1,0 +1,32 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block invoice %}active-color{% endblock invoice %}
+{% block body %}
+
+<div class="container my-5">
+    <table id="table_id" class="display">
+        <thead>
+            <tr>
+                <th>Bill Id</th>
+                <th>Doctor Name</th>
+                <th>Appo Date</th>
+                <th>Total Bill</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in bill %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.doctorName}}</td>
+                <td>{{i.date}}</td>
+                <td>{{i.totalBill}}</td>
+                <td><a href="/viewBill/{{i.id}}/"><button class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i>
+                            View Bill</button></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock body%}

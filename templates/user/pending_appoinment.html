@@ -1,0 +1,43 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block body %}
+
+<div class="container">
+    <p class="h4 font-weight-bold text-center text-info my-5">Pending Appoinment</p>
+    {% if user.status == "pending" %}
+    <h6 class="mb-4 text-center">Your Profile is now <span class="text-danger text-uppercase">{{user.status}}</span> ,
+        Wait for Accept Your Profile
+        Request.</h6>
+    {% else %}
+    <div class="row">
+        {% for i , j in myList %}
+        <div class="col-lg-6">
+            <div class="card mb-4 border-left-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <p class="font-weight-bold h5">ID : {{i.bookId}}</p>
+                        <p class="text-center mb-3">Doctor Name : <span class="font-weight-bold"> {{j}}</span></p>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="mb-1">Name : {{i.patientName}}</p>
+                            <p class="mb-1">Doctor : {{i.doctorId}}</p>
+                            <p class="mb-1">Health Card : {{i.hcNo}}</p>
+                            <p class="mb-1">Date : {{i.date}}</p>
+                        </div>
+                        <div class="col border-left-info">
+                            <p class="mb-1">Payment : {{i.payment}}</p>
+                            <p class="mb-1">Approve : {{i.approve}}</p>
+                            <p class="mb-1">Time : {{i.time}}</p>
+                            <p class="mb-1">Amount : {{i.amount}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock body%}

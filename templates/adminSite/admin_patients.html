@@ -1,0 +1,54 @@
+{% extends './basic-admin.html' %}
+{% load static %}
+
+{% block body %}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">List of Patients</h1>
+    <div class="row">
+
+        {% for i in userData%}
+
+        <!-- Border Left Utilities -->
+        <div class="col-lg-6">
+            <div class="card mb-4 border-left-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <p class="font-weight-bold h5">ID : {{i.id}}</p>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <img src="media/{{i.userImg}}" width="200" height="200" alt="" style="border-radius:50%">
+                        </div>
+
+                        <div class="col">
+                            <p class="mb-1">Name : {{i.first_name}} {{i.last_name}}</p>
+                            <p class="mb-1">Username : {{i.username}}</p>
+                            <p class="mb-1">bloodGroup : {{i.bloodGroup}}</p>
+                            <p class="mb-1">Field : {{i.fieldName}}</p>
+                            <p class="mb-1">HC By Admin : {{i.healthCardAcceptByAdmin}}</p>
+                            <p class="mb-1">Status : {{i.status}}</p>
+                        </div>
+                        <div class="col border-left-info">
+                            <p class="mb-1">Email : {{i.email}}</p>
+                            <p class="mb-1">mobile : {{i.mobile}}</p>
+                            <p class="mb-1">dob : {{i.dob}}</p>
+                            <p class="mb-1">address : {{i.address}}</p>
+                            <p class="mb-1">city : {{i.city}}</p>
+                            <p class="mb-1">state : {{i.state}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock body%}

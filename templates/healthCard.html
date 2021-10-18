@@ -1,0 +1,71 @@
+{% extends 'basic.html' %} {% load static %} {% block body %}
+
+<div class="my-3 bg-info2 px-4 py-2">
+    <p class="my-1">Home / Health Card</p>
+    <p class="h4 font-weight-bold">Health Card</p>
+</div>
+
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="container col-lg-3 col-sm-4 mr-auto my-3">
+            {% include './incFile/user_profile_menu.html' %}
+        </div>
+        <div class="container col-lg-9 col-sm-8 my-3 hcCard">
+            <div class="container text-center col-md-6 d-flex flex-column justify-content-center align-items-center">
+                <h4 class="text-info mb-4 text-center font-weight-bold">Health Card</h4>
+                {% if user.status == "pending" %}
+                <h6 class="text-danger mb-4 text-center">Your status is now <span
+                        class="text-uppercase">{{user.status}}</span></h6>
+
+                <p class="my-3 h5">If you want to genrating Health Card You will have to give your
+                    confirmation request only.</p>
+                <button class="btn btn-outline-success disable-btn">Apply For Health Card</button>
+
+                {% else %}
+
+                {% if user.healthCard == False %}
+
+                <p class=" my-3 h5">If you want to genrating Health Card You will have to give your
+                    confirmation request only.</p>
+                <form action="/hcUpdate/{{user.id}}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="uId" value="{{user.id}}">
+                    <input type="hidden" name="uFName" value="{{user.first_name}}">
+                    <input type="hidden" name="uLName" value="{{user.last_name}}">
+                    <button class="btn btn-outline-success">Apply For Health Card</button>
+                </form>
+
+                {% elif user.healthCardAcceptByAdmin == True %}
+
+                <div class="thank-card mt-5">
+                    <i class="fas fa-check-circle text-primary fa-3x"></i>
+                    <p class="font-weight-bold mt-3 h5">Welcome ! {{user.first_name}} {{user.last_name}}</p>
+                    <p>Your Health Card is Ready.</p>
+                </div>
+                <a href="/viewHealthCard/{{user.id}}"><button class="btn btn-sm btn-outline-success">View Health Card</button></a>
+
+                {% else %}
+
+                <div class="thank-card mt-5">
+                    <i class="fas fa-check-circle text-primary fa-3x"></i>
+                    <p class="font-weight-bold mt-3 h5">Thank You ! {{user.first_name}} {{user.last_name}}</p>
+                    <p>Your Request send successfully. wait for your healthcard verification.</p>
+                </div>
+
+                {% endif %}
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const button = document.querySelector('.disable-btn')
+
+    button.disabled = true
+</script>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends './basic-admin.html' %}
+{% load static %}
+
+{% block body %}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Search Patients</h1>
+    <form class="hcSearch d-flex">
+        {% csrf_token %}
+        <input class="form-control" type="search" id="hcNo" placeholder="Search Patients By Health Card"
+            style="border-radius: 50px !important;font-size:1.5rem">
+    </form>
+
+    <div class="hcList">
+    
+    </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock body%}

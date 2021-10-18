@@ -1,0 +1,48 @@
+{% extends './basic-admin.html' %}
+{% load static %}
+
+{% block body %}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Pending Health Cards</h1>
+    <div class="row">
+
+        {% for i in userData%}
+
+        <!-- Border Left Utilities -->
+        <div class="col-lg-6">
+            <div class="card mb-4 border-left-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <p class="font-weight-bold h5">ID : {{i.id}}</p>
+                        <div class="d-flex">
+                            <form action="/acceptHC/{{i.id}}" method="POST">
+                                {% csrf_token %}
+                                <button class="mr-2 btn btn-outline-success">Accept</button>
+                            </form>
+                            <form action="/rejectHC/{{i.id}}" method="POST">
+                                {% csrf_token %}
+                                <button class="btn btn-outline-danger">Reject</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="mb-1">Name : {{i.first_name}} {{i.last_name}}</p>
+                            <p class="mb-1">Username : {{i.username}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock body%}

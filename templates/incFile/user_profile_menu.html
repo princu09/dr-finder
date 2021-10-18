@@ -1,0 +1,45 @@
+{% load static %}
+
+{% if user.is_authenticated %}
+
+<div class="card" style="width: 18rem;">
+    <div class="d-flex justify-content-center mt-2">
+        <img src="/media/{{user.userImg}}" width="250" height="250" alt="" style="border-radius:50%">
+    </div>
+    <div class="card-body text-center">
+        <h5 class="card-title"><i class="fas fa-user-circle"></i> {{user.first_name}} {{user.last_name}}</h5>
+        <p class="card-text"><i class="fas fa-birthday-cake"></i> {{user.dob}}</p>
+        <p class="card-text"><i class="fas fa-map-marker-alt"></i> {{user.city}} , {{user.state}}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        {% if user.fieldName == "Patient" %}
+        <li class="list-group-item"><a href="/myProfile" {% if "myProfile" in request.path %}class="text-info"
+                {% endif %}><i class="mr-2 fas fa-columns"></i> Dashboard</a></li>
+        <li class="list-group-item">
+            <a href="/healthCard" {% if "healthCard" in request.path %}class="text-info" {% endif %}><i
+                    class="mr-2 fas fa-file-medical"></i> Health Card</a>
+        </li>
+        <li class="list-group-item"><a href="/changeProfile/{{user.id}}"
+                {% if "changeProfile" in request.path %}class="text-info" {% endif %}><i
+                    class="mr-2 fas fa-user-cog"></i> Profile Setting</a></li>
+        <li class="list-group-item"><a href="/changePass" {% if "changePass" in request.path %}class="text-info"
+                {% endif %}><i class="mr-2 fas fa-key"></i> Change Password</a></li>
+        <li class="list-group-item"><a href="/logout"><i class="mr-2 fas fa-sign-out-alt"></i> Logout</a></li>
+        {% else %}
+        <li class="list-group-item"><a href="/myProfile" {% if "myProfile" in request.path %}class="text-info"
+                {% endif %}><i class="mr-2 fas fa-columns"></i> Dashboard</a></li>
+        <li class="list-group-item"><a href="/changeProfile/{{user.id}}"
+                {% if "changeProfile" in request.path %}class="text-info" {% endif %}><i
+                    class="mr-2 fas fa-user-cog"></i> Profile Setting</a></li>
+        <li class="list-group-item"><a href="/changePass" {% if "changePass" in request.path %}class="text-info"
+                {% endif %}><i class="mr-2 fas fa-key"></i> Change Password</a></li>
+        <li class="list-group-item"><a href="/logout"><i class="mr-2 fas fa-sign-out-alt"></i> Logout</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% else %}
+<script>
+    window.location.replace("/");
+</script>
+{% endif %}

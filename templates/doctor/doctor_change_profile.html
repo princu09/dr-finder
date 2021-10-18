@@ -1,0 +1,162 @@
+{% extends 'basic.html' %} {% load static %} {% block body %}
+
+<div class="my-3 bg-info2 px-4 py-2">
+    <p class="my-1">Home / Change Profile</p>
+    <p class="h4 font-weight-bold">Change Profile</p>
+</div>
+
+{% if user.fieldName == "Doctor" %}
+
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="container col-lg-3 col-sm-4 mr-auto my-3">
+            {% include '../incFile/doctor_profile_menu.html' %}
+        </div>
+        <div class="container col-lg-9 col-sm-8 my-3">
+            <div class="container">
+                <h4 class="text-info mb-4 text-center font-weight-bold">Change User Details</h4>
+                {% if user.status == "pending" %}
+                <h6 class="text-danger mb-4 text-center">Your status is now <span
+                        class="text-uppercase">{{user.status}}</span></h6>
+
+                <form>
+                    <div class="form-row my-2">
+                        <div class="col-md-6 my-2">
+                            <label for="">Field Name</label>
+                            <input type="text" name="field" class="form-control" value="{{editData.fieldName}}"
+                                disabled>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Username</label>
+                            <input type="text" name="usrname" class="form-control" value="{{editData.username}}"
+                                disabled>
+                        </div>
+
+                        <div class="col-md-6 my-2">
+                            <label for="">First Name</label>
+                            <input type="text" name="fname" class="form-control" value="{{editData.first_name}}"
+                                disabled>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Last Name</label>
+                            <input type="text" name="lname" class="form-control" value="{{editData.last_name}}"
+                                disabled>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Mobile</label>
+                            <input type="text" name="mobile" class="form-control" value="{{editData.mobile}}" disabled>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Email</label>
+                            <input type="email" name="email" class="form-control" value="{{editData.email}}" disabled>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Date of Birth</label>
+                            <input type="date" name="dob" class="form-control" value="{{editData.dob}}" disabled>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="inputState">Blood Group</label>
+                            <select id="inputState" name="blood" class="form-control" disabled>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 my-2">
+                            <label for="">Address</label>
+                            <input type="text" name="address" class="form-control" value="{{editData.address}}"
+                                disabled>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">City</label>
+                            <input type="text" name="city" class="form-control" value="{{editData.address}}" disabled>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">State</label>
+                            <input type="text" name="state" class="form-control" value="{{editData.address}}" disabled>
+                        </div>
+                    </div>
+                </form>
+                {% else %}
+
+                <form action="/doctorUpdateProfile/{{editData.id}}/" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row my-2">
+                        <div class="col-md-6 my-2">
+                            <label class="h5">User Image</label>
+                            <br>
+                            <input type="file" name="userImg" class="" accept=".png , .jpg , .jpeg">
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Amount Per Hour</label>
+                            <input type="number" name="amount" class="form-control">
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Field Name</label>
+                            <input type="text" name="field" class="form-control" value="{{editData.fieldName}}"
+                                readonly>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Username</label>
+                            <input type="text" name="usrname" class="form-control" value="{{editData.username}}"
+                                readonly>
+                        </div>
+
+                        <div class="col-md-6 my-2">
+                            <label for="">First Name</label>
+                            <input type="text" name="fname" class="form-control" value="{{editData.first_name}}">
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Last Name</label>
+                            <input type="text" name="lname" class="form-control" value="{{editData.last_name}}">
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Mobile</label>
+                            <input type="text" name="mobile" class="form-control" value="{{editData.mobile}}">
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Email</label>
+                            <input type="email" name="email" class="form-control" value="{{editData.email}}">
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">Date of Birth</label>
+                            <input type="date" name="dob" class="form-control" value="{{editData.dob}}" required>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="inputState">Blood Group</label>
+                            <select id="inputState" name="blood" class="form-control">
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 my-2">
+                            <label for="">Address</label>
+                            <input type="text" name="address" class="form-control" value="{{editData.address}}">
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">City</label>
+                            <input type="text" name="city" class="form-control" value="{{editData.address}}">
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label for="">State</label>
+                            <input type="text" name="state" class="form-control" value="{{editData.address}}">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-info">Save Changes</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock body %}

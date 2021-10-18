@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr.Finder Bill</title>
+
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 main">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12 d-flex justify-content-between align-items-center">
+                            <h4 style="color: #F81D2D;"><strong>Dr.Finder</strong></h4>
+                            <p class="font-weight-bold">Date : {{billData.0.date}}</p>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12 text-xs-center">
+                            <h5 class="font-weight-bold">INVOICE #{{billData.0.id}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-xs-center">
+                            <p class="font-weight-bold">Patient Name : {{billData.0.patientName}}</p>
+                            <p class="font-weight-bold">Patient Id : {{billData.0.patientId}}</p>
+                            <p class="font-weight-bold">Health Card No : {{billData.0.hc}}</p>
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <h5>Description</h5>
+                                    </th>
+                                    <th>
+                                        <h5>Amount</h5>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i , j in myList %}
+                                <tr>
+                                    <td class="col-md-9">{{i}}</td>
+                                    <td class="col-md-3"><i class="fa fa-inr" aria-hidden="true"></i> {{j}}</td>
+                                </tr>
+                                {% endfor %}
+                                <tr style="color: #F81D2D;">
+                                    <td class="text-xs-right">
+                                        <h4><strong>Total:</strong></h4>
+                                    </td>
+                                    <td class="text-xs-left">
+                                        <h5><strong><i class="fa fa-inr" aria-hidden="true"></i> {{billData.0.totalBill}} </strong></h5>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <div class="col-md-12">
+                            <p><b>Date :</b> {{billData.0.date}}</p>
+                            <br />
+                            <p><b>Signature</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .main {
+            background: #ffffff;
+            border-bottom: 15px solid #F81D2D;
+            border-top: 15px solid #1E1F23;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding: 40px 30px !important;
+            position: relative;
+            box-shadow: 0 1px 21px #808080;
+            font-size: 10px;
+        }
+
+        .main thead {
+            background: #1E1F23;
+            color: #fff;
+        }
+    </style>
+
+    <script src="{% static 'jquery-3.5.1.min.js' %}"></script>
+
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+</body>
+
+</html>

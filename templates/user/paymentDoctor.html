@@ -1,0 +1,21 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block body %}
+
+<div class="container col-md-6">
+    <h1>Merchant Check Out Page</h1>
+    <h2>Please Do Not Refresh Page. </h2>
+
+    <form action="https://securegw-stage.paytm.in/order/process" method="POST" name="paytm">
+    {% csrf_token %}
+        {% for key , value in parameters_dict.items %}
+        <input type="hidden" name="{{key}}" value="{{value}}">
+        {% endfor %}
+    </form>
+</div>
+
+<script>
+    document.paytm.submit()
+</script>
+{% endblock %}

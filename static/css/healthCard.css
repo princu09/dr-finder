@@ -1,0 +1,10 @@
+@media (max-width:991px) {
+    .hcCard .h5 {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    .hcCard .text-danger {
+        font-size: 0.8rem;
+        font-weight: normal !important;
+    }
+}

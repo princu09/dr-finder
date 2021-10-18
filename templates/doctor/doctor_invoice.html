@@ -1,0 +1,58 @@
+{% extends 'basic.html' %} {% load static %} {% block body %}
+
+<div class="my-3 bg-info2 px-4 py-2">
+    <p class="my-1">Home / Profile / My Patients</p>
+    <p class="h4 font-weight-bold">My Patients</p>
+</div>
+
+{% if user.fieldName == "Doctor" %}
+
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="container col-lg-3 col-sm-4 mr-auto my-3">
+            {% include '../incFile/doctor_profile_menu.html' %}
+        </div>
+        <div class="container col-lg-9 col-sm-8 my-3">
+            <div class="container-fluid">
+                <h4 class="text-info mb-4 text-center font-weight-bold">Invoices</h4>
+                {% if user.status == "pending" %}
+                <h6 class="text-danger mb-4 text-center">Your status is now <span
+                        class="text-uppercase">{{user.status}}</span></h6>
+                {% else %}
+                <div class="mt-5">
+                    <table id="table_id" class="display">
+                        <thead>
+                            <tr>
+                                <th>PId</th>
+                                <th>PName</th>
+                                <th>Date</th>
+                                <th>Health Card</th>
+                                <th>totalBill</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in billData %}
+                            <tr>
+                                <td>{{i.patientId}}</td>
+                                <td>{{i.patientName}}</td>
+                                <td>{{i.date}}</td>
+                                <td>{{i.hc}}</td>
+                                <td>{{i.totalBill}}</td>
+                                <td>
+                                    <a href="/viewBill/{{i.id}}/"><button class="btn mr-2 btn-sm btn-outline-info"><i class="fas fa-eye"></i> View</button></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock body %}

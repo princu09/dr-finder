@@ -1,0 +1,229 @@
+{% extends 'basic.html' %} {% load static %} {% block body %}
+
+<div class="my-3 bg-info2 px-4 py-2">
+  <p class="my-1">Home / My Profile</p>
+  <p class="h4 font-weight-bold">My Profile</p>
+</div>
+
+<div class="container-fluid my-4">
+  <div class="row">
+    {% if user.fieldName == "Patient" %}
+
+    <div class="container col-lg-3 col-sm-4 mr-auto my-3">
+      {% include './incFile/user_profile_menu.html' %}
+    </div>
+
+    <div class="container col-lg-9 col-sm-8 my-3">
+      <div class="container">
+        {% if user.status == "pending" %}
+        <h6 class="mb-4 text-center">
+          Your Profile is now
+          <span class="text-danger text-uppercase">{{user.status}}</span> , Wait
+          for Accept Your Profile Request.
+        </h6>
+        {% else %}
+
+        <div class="col-md-12 d-flex justify-content-center myProfile-pills">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="appoinments-tab" data-toggle="pill" href="#appoinments" role="tab"
+                aria-controls="appoinments" aria-selected="true">
+                <i class="far fa-calendar-check"></i> Appoinments</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="prescriptions-tab" data-toggle="pill" href="#prescriptions" role="tab"
+                aria-controls="prescriptions" aria-selected="false"><i class="fas fa-prescription"></i>
+                Prescriptions</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="medicalRecords-tab" data-toggle="pill" href="#medicalRecords" role="tab"
+                aria-controls="medicalRecords" aria-selected="false">
+                <i class="fas fa-file-medical-alt"></i> Medical Records</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="billing-tab" data-toggle="pill" href="#billing" role="tab" aria-controls="billing"
+                aria-selected="false"><i class="fas fa-file-invoice-dollar"></i> Billing</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="appoinments" role="tabpanel" aria-labelledby="appoinments-tab">
+            <div class="mt-5">
+              <table id="table_id" class="display">
+                <thead>
+                  <tr>
+                    <th>Doctor</th>
+                    <th>Appt Date</th>
+                    <th>Timing</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for i in userData %}
+                  <tr>
+                    <td>{{i.doctorId}}</td>
+                    <td>{{i.date}}</td>
+                    <td>{{i.time}}</td>
+                    <td>{{i.amount}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="prescriptions" role="tabpanel" aria-labelledby="prescriptions-tab">
+            <div class="mt-5">
+              <table id="table_id2" class="display">
+                <thead>
+                  <tr>
+                    <th>Appt ID</th>
+                    <th>Medicine</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for i in appo %}
+                  <tr>
+                    <td>{{i.appoId}}</td>
+                    <td>{{i.tblName}}</td>
+                    <td>
+                      <a href="/viewPrescription/{{i.appoId}}/"><button class="btn btn-sm btn-outline-info">
+                          <i class="fas fa-eye"></i> View
+                        </button></a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="medicalRecords" role="tabpanel" aria-labelledby="medicalRecords-tab">
+            <div class="mt-5">
+              <table id="table_id3" class="display">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>File</th>
+                    <th>View</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for i in mediReport %}
+                  <tr>
+                    <td>{{i.id}}</td>
+                    <td>{{i.date}}</td>
+                    <td>{{i.desc}}</td>
+                    <td>{{i.report}}</td>
+                    <td>
+                      <a target="_blank" href="/media/{{i.report}}">
+                        <button class="btn btn-sm btn-outline-dark"><i class="fas fa-eye"></i> View</button></a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade show" id="billing" role="tabpanel" aria-labelledby="billing-tab">
+            <div class="mt-5">
+              <table id="table_id4" class="display">
+                <thead>
+                  <tr>
+                    <th>Patient ID</th>
+                    <th>Patient Name</th>
+                    <th>Date</th>
+                    <th>Health Card</th>
+                    <th>Total Bill</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for i in bill %}
+                  <tr>
+                    <td>{{i.patientId}}</td>
+                    <td>{{i.patientName}}</td>
+                    <td>{{i.date}}</td>
+                    <td>{{i.hc}}</td>
+                    <td>{{i.totalBill}}</td>
+                    <td><a href="/viewBill/{{i.id}}/"><button class="btn btn-outline-info btn-sm"><i
+                            class="fas fa-eye"></i> View Bill</button></a></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% elif user.fieldName == "Medical" %}
+
+    <div class="container col-lg-3 col-sm-4 mr-auto my-3">
+      {% include './incFile/user_profile_menu.html' %}
+    </div>
+
+    <div class="container col-lg-9 col-sm-8 my-3">
+      <div class="container">
+        {% if user.status == "pending" %}
+        <h6 class="mb-4 text-center">
+          Your Profile is now
+          <span class="text-danger text-uppercase">{{user.status}}</span> , Wait
+          for Accept Your Profile Request.
+        </h6>
+        {% else %}
+        <!-- Page Heading -->
+        <form class="hcSearch2 d-flex my-4" action="" method="POST">
+          {% csrf_token %}
+          <input class="form-control" type="search" name="billNo" placeholder="Enter Bill No"
+            style="border-radius: 50px !important;font-size:1rem" required>
+        </form>
+
+        {% if billData != None %}
+
+        <table id="table_id" class="display">
+          <thead>
+            <tr>
+              <th>Bill Id</th>
+              <th>Doctor Name</th>
+              <th>Appo Date</th>
+              <th>Total Bill</th>
+              <th>View Bill</th>
+              <th>View Prescription</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in billData %}
+            <tr>
+              <td>{{i.id}}</td>
+              <td>{{i.doctorName}}</td>
+              <td>{{i.date}}</td>
+              <td>{{i.totalBill}}</td>
+              <td><a href="/viewBill/{{i.id}}/"><button class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i>
+                    View Bill</button></a></td>
+              <td><a href="/viewPrescription/{{i.appoId}}/"><button class="btn btn-outline-info btn-sm"><i
+                      class="fas fa-eye"></i> View Prescription</button></a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+
+        {% endif %}
+      </div>
+    </div>
+
+    {% else %}
+    <script>
+      window.location.replace("/");
+    </script>
+
+    {% endif %}
+  </div>
+</div>
+{% endblock body %}

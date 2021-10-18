@@ -1,0 +1,8 @@
+@media (max-width:991px) {
+    .myProfile-pills .nav-link {
+        font-size: 0.8rem;
+    }
+    .myProfile-pills .active {
+        border-radius: 50px;
+    }
+}

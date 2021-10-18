@@ -1,0 +1,42 @@
+{% load static %}
+
+{% if user.is_authenticated %}
+
+<div class="card" style="width: 18rem;">
+    <div class="d-flex justify-content-center mt-2">
+        <img src="/media/{{user.userImg}}" width="250" height="250" alt="" style="border-radius:50%">
+    </div>
+    <div class="card-body text-center">
+        <h5 class="card-title">Dr. {{user.first_name}} {{user.last_name}}</h5>
+        <p class="text-secondary">4 Year Experiance</p>
+        <p class="text-secondary">{{user.dob}}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+
+        <li class="list-group-item"><a href="/doctor_profile" {% if "doctor_profile" in request.path %}class="text-info"
+                {% endif %}><i class="mr-2 fas fa-columns"></i> Dashboard</a></li>
+
+        <li class="list-group-item"><a href="/doctor_appoinments/{{user.id}}" {% if "doctor_appoinments" in request.path %}class="text-info"
+                {% endif %}><i class="mr-2 fas fa-calendar-check"></i> Appoinments</a></li>
+
+        <li class="list-group-item"><a href="/doctor_myPatients/{{user.id}}" {% if "doctor_myPatients" in request.path %}class="text-info"
+                {% endif %}><i class="mr-2 fas fa-user-injured"></i> My Patients</a></li>
+
+        <li class="list-group-item"><a href="/doctor_invoice" {% if "doctor_invoice" in request.path %}class="text-info"
+                {% endif %}><i class="mr-2 fas fa-file-invoice"></i> Invoices</a></li>
+        
+        <li class="list-group-item"><a href="/doctorChangeProfile/{{user.id}}"
+                {% if "doctorChangeProfile" in request.path %}class="text-info" {% endif %}><i
+                    class="mr-2 fas fa-user-cog"></i> Profile Setting</a></li>
+
+        <li class="list-group-item"><a href="/doctorChangePass" {% if "doctorChangePass" in request.path %}class="text-info" {% endif %} ><i class="mr-2 fas fa-key"></i> Change Password</a></li>
+
+        <li class="list-group-item"><a href="/logout"><i class="mr-2 fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+</div>
+
+{% else %}
+<script>
+    window.location.replace("/");
+</script>
+{% endif %}

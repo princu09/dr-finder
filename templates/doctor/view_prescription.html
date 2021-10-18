@@ -1,0 +1,32 @@
+{% extends 'basic.html' %} {% load static %} {% block body %}
+
+
+<div class="container my-4">
+    <div class="row">
+        <!-- Border Left Utilities -->
+        <div class="col">
+            <div class="card mb-4 border-left-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <p class="font-weight-bold h5">ID : {{userData.0.id}}</p>
+                        <p class="font-weight-bold h5">Appoinment ID : {{userData.0.appoId}}</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 font-weight-bold">Tablet/Cyrup Name</div>
+                        <div class="col-md-3 font-weight-bold">Qty</div>
+                        <div class="col-md-3 font-weight-bold">Days</div>
+                        <div class="col-md-3 font-weight-bold">Timing</div>
+
+                        {% for a , b , c , d in myList  %}
+                        <div class="col-md-3 mt-3">{{a}}</div>
+                        <div class="col-md-3 mt-3">{{b}}</div>
+                        <div class="col-md-3 mt-3">{{c}}</div>
+                        <div class="col-md-3 mt-3">{{d}}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

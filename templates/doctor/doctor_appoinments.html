@@ -1,0 +1,119 @@
+{% extends 'basic.html' %} {% load static %}
+
+{% block body %}
+
+<div class="my-3 bg-info2 px-4 py-2">
+    <p class="my-1">Home / Profile / Appoinments</p>
+    <p class="h4 font-weight-bold">Appoinments</p>
+</div>
+
+{% if user.fieldName == "Doctor" %}
+
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="container col-lg-3 col-sm-4 mr-auto my-3">
+            {% include '../incFile/doctor_profile_menu.html' %}
+        </div>
+        <div class="container col-lg-9 col-sm-8 my-3">
+            <div class="container">
+                <h4 class="text-info mb-4 text-center font-weight-bold">Appoinments</h4>
+                {% if user.status == "pending" %}
+                <h6 class="text-danger mb-4 text-center">Your status is now <span
+                        class="text-uppercase">{{user.status}}</span></h6>
+                {% else %}
+                <div class="mt-5">
+                    <table id="table_id" class="display">
+                        <thead>
+                            <tr>
+                                <th>Appoinment ID</th>
+                                <th>Patient Name</th>
+                                <th>Appt Date</th>
+                                <th>Paid Ammount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in h %}
+                            <tr>
+                                <td>{{i.bookId}}</td>
+                                <td>{{i.patientName}}</td>
+                                <td>{{i.date}}</td>
+                                <td>
+                                    {% if i.payment == False %}
+                                    Pending
+                                    {% else %}
+                                    Success
+                                    {% endif %}
+                                </td>
+                                <td class="d-flex">
+                                    <input type="hidden" id="bookId" value="{{i.bookId}}">
+                                    <button id="approveId" class="btn mr-2 btn-sm btn-outline-success"
+                                        data-toggle="modal" data-target="#approveModal">Approve</button>
+                                    <button id="deniedId" class="btn btn-sm btn-outline-danger" data-toggle="modal"
+                                        data-target="#deniedModal">Denied</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Approve Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Are You Sure To Accept Appoinment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/acceptAppoinment/{{user.id}}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" id="bookIdPut" name="bookIdPut" value="">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Set Time for Appoinment</label>
+                        <input type="time" name="time" required class="form-control" id="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-danger" data-dismiss="modal" type="reset">Close</button>
+                    <button class="btn btn-outline-success" type="submit">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Denied Modal -->
+<div class="modal fade" id="deniedModal" tabindex="-1" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Are You Sure To Denied Appoinment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/deniedAppoinment/{{user.id}}/" method="POST">
+                {% csrf_token %}
+                <input type="hidden" id="bookIdPut2" name="bookIdPut2" value="">
+                <div class="modal-body">
+                    <button class="btn btn-outline-danger" data-dismiss="modal" type="reset">Close</button>
+                    <button class="btn btn-outline-success" type="submit">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock body %}

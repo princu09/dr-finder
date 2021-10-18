@@ -1,0 +1,111 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}"><img src="{% static 'dr_logo.png' %}" alt="" width="40"> Dr.Finder NFG</a></h1>
+{% endblock %}
+
+{% block extrastyle %}
+
+<style>
+    #header {
+        background: black;
+    }
+
+    #branding h1,
+    #branding h1 a:link,
+    #branding h1 a:focus,
+    #branding h1 a:visited {
+        color: white;
+        outline: none;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    #user-tools {
+        color: white;
+        font-weight: bold;
+        font-size: 0.8rem;
+    }
+
+    #user-tools a {
+        padding-right: 0.5rem;
+        padding-left: 0.5rem;
+    }
+
+    #content h1 {
+        font-weight: bold;
+    }
+
+    .module h2,
+    .module caption,
+    .inline-group h2 {
+        font-weight: bold;
+        background: #333;
+        text-transform: none;
+        font-size: 1rem;
+    }
+
+    div.breadcrumbs {
+        background: #333;
+        margin-bottom: 1rem;
+    }
+
+    .object-tools .addlink:visited,
+    .object-tools a {
+        background: #000;
+        text-transform: none;
+    }
+
+    .object-tools a.viewsitelink,
+    .object-tools a.golink,
+    .object-tools a.addlink,
+    .object-tools a:link {
+        font-weight: bold;
+        font-size: 0.8rem;
+    }
+
+    .object-tools a:link,
+    .object-tools a:visited {
+        background: #000;
+    }
+
+    .related-widget-wrapper .selector-chosen h2 {
+        background: #000;
+        color: #fff;
+    }
+
+    .button,
+    input[type="submit"],
+    input[type="button"],
+    .submit-row input,
+    a.button {
+        background: #000;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .deletelink-box .deletelink {
+        font-weight: bold;
+    }
+
+    .button.default,
+    input[type="submit"].default,
+    .submit-row input.default {
+        font-weight: bold;
+        background: green;
+    }
+
+    .object-tools a.viewsitelink,
+    .object-tools a.golink,
+    .object-tools a.addlink {
+        padding-right: 11px;
+    }
+</style>
+
+{% endblock %}
+
+{% block nav-global %}
+{% endblock %}

@@ -1,0 +1,297 @@
+{% extends 'basic.html' %} {% load static %} {% block body %}
+
+{% if user.fieldName == "Doctor" %}
+
+<div class="container d-flex justify-content-center my-4">
+    {% for i in userData %}
+    <div class="col-lg-9">
+        <div class="card mb-4 border-left-info">
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <p class="font-weight-bold h5">ID : {{i.id}}</p>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <img src="/media/{{i.userImg}}" width="200" height="200" alt="" style="border-radius:50%">
+                    </div>
+                    <div class="col">
+                        <p class="mb-1">Name : {{i.first_name}} {{i.last_name}}</p>
+                        <p class="mb-1">Username : {{i.username}}</p>
+                        <p class="mb-1">bloodGroup : {{i.bloodGroup}}</p>
+                        <p class="mb-1">Field : {{i.fieldName}}</p>
+                        <p class="mb-1">HC By Admin : {{i.healthCardAcceptByAdmin}}</p>
+                        <p class="mb-1">HC No : {{hc.0.hcNo}}</p>
+                    </div>
+                    <div class="col border-left-info">
+                        <p class="mb-1">Email : {{i.email}}</p>
+                        <p class="mb-1">mobile : {{i.mobile}}</p>
+                        <p class="mb-1">dob : {{i.dob}}</p>
+                        <p class="mb-1">address : {{i.address}}</p>
+                        <p class="mb-1">city : {{i.city}}</p>
+                        <p class="mb-1">state : {{i.state}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="container mb-5">
+    <div class="col-md-12 d-flex justify-content-center">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="mr-2 nav-item" role="presentation">
+                <a class="nav-link active" id="appoinment-tab" data-toggle="pill" href="#appoinment" role="tab"
+                    aria-controls="appoinment" aria-selected="true" style="border-radius:50px">
+                    <i class="fas fa-calendar-day"></i>
+                    Appoinment</a>
+            </li>
+            <li class="mr-2 nav-item rounded" role="presentation">
+                <a class="nav-link" id="prescription-tab" data-toggle="pill" href="#prescription" role="tab"
+                    aria-controls="prescription" aria-selected="false" style="border-radius:50px">
+                    <i class="fas fa-prescription"></i>
+                    Prescriptions</a>
+            </li>
+            <li class="mr-2 nav-item rounded" role="presentation">
+                <a class="nav-link" id="medical-records-tab" data-toggle="pill" href="#medical-records" role="tab"
+                    aria-controls="medical-records" aria-selected="false" style="border-radius:50px">
+                    <i class="fas fa-notes-medical"></i>
+                    Medical Records</a>
+            </li>
+            <li class="mr-2 nav-item rounded" role="presentation">
+                <a class="nav-link" id="billing-tab" data-toggle="pill" href="#billing" role="tab"
+                    aria-controls="billing" aria-selected="false" style="border-radius:50px">
+                    <i class="fas fa-file-invoice"></i>
+                    Billing</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="tab-content" id="pills-tabContent">
+
+        <div class="tab-pane fade show active" id="appoinment" role="tabpanel" aria-labelledby="appoinment-tab">
+            <div class="mt-5">
+                <table id="table_id" class="display">
+                    <thead>
+                        <tr>
+                            <th>Doctor</th>
+                            <th>App Date</th>
+                            <th>Time</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in appo %}
+                        <tr>
+                            <td>{{user.first_name}} {{user.last_name}}</td>
+                            <td>{{i.date}}</td>
+                            <td>{{i.time}}</td>
+                            <td>{{i.amount}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="prescription" role="tabpanel" aria-labelledby="prescription-tab">
+            <div class="mt-5">
+                <div class="d-flex justify-content-end my-3">
+                    {% for i in appo %}
+                    <a href="/addPrescriptions/{{i.bookId}}/{{pId}}"><button class="btn btn btn-outline-info">Add
+                            Prescriptions</button></a>
+                    {% endfor %}
+                </div>
+                <table id="table_id2" class="display">
+                    <thead>
+                        <tr>
+                            <th>Appt Date</th>
+                            <th>Timing</th>
+                            <th>Name</th>
+                            <th>Created By</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in appo %}
+                        <tr>
+                            <td>{{i.date}}</td>
+                            <td>{{i.time}}</td>
+                            <td>{{prescriptions.0.tblName}}</td>
+                            <td>{{user.first_name}} {{user.last_name}}</td>
+                            <td>
+                                <a href="/viewPrescription/{{prescriptions.0.appoId}}/"><button
+                                        class="btn btn-sm btn-outline-info"><i class="fas fa-eye"></i> View</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="medical-records" role="tabpanel" aria-labelledby="medical-records">
+            <div class="mt-5">
+                <div class="d-flex justify-content-end my-3">
+                    <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#submitReport">
+                        Add Medical Report
+                    </button>
+                </div>
+                <table id="table_id3" class="display">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>File</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in mediReport %}
+                        <tr>
+                            <td>{{i.patientId}}</td>
+                            <td>{{i.date}}</td>
+                            <td>{{i.desc}}</td>
+                            <td>{{i.report}}</td>
+                            <td>
+                                <a target="_blank" href="/media/{{i.report}}">
+                                    <button class="btn btn-sm btn-outline-dark"><i class="fas fa-eye"></i>
+                                        View</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="billing" role="tabpanel" aria-labelledby="billing-tab">
+            <div class="mt-5">
+                <div class="d-flex justify-content-end my-3">
+                    <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#createBill">
+                        Create Bill
+                    </button>
+                </div>
+                <table id="table_id4" class="display">
+                    <thead>
+                        <tr>
+                            <th>Patient ID</th>
+                            <th>Patient Name</th>
+                            <th>Date</th>
+                            <th>Health Card</th>
+                            <th>Total Bill</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in bill %}
+                        <tr>
+                            <td>{{i.patientId}}</td>
+                            <td>{{i.patientName}}</td>
+                            <td>{{i.date}}</td>
+                            <td>{{i.hc}}</td>
+                            <td>{{i.totalBill}}</td>
+                            <td><a href="/viewBill/{{i.id}}/"><button class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i> View Bill</button></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="submitReport" tabindex="-1" role="dialog" aria-labelledby="submitReportTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Medical Records</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="/addMedicalRecords/{{pId}}/{{appoId}}/" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Date</label>
+                        <input type="date" name="date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Description (optional)</label>
+                        <textarea class="form-control" name="desc" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Upload File</label>
+                        <input type="file" name="report" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="createBill" tabindex="-1" role="dialog" aria-labelledby="createBillTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Create Bill</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="/createBill/{{pId}}/{{appoId}}/" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between">
+                        <img src="{% static 'dr_logo.png' %}" width="80px" alt="" class="">
+                        <div class="form-group col-md-3">
+                            <label for="">Date</label>
+                            <input type="date" class="form-control" id="" name="date">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-sm btn-success" id="addBillItem"><i class="fas fa-plus-circle"></i> Add
+                            Item</button>
+                    </div>
+                    <div class="row container">
+                        <div class="container d-flex" id="lastTitle">
+                            <div class="col-md-6 mb-3">
+                                <label for="">Name</label>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="">Bill</label>
+                            </div>
+                        </div>
+                        <div class="container d-flex">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="name">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="number" class="form-control" id="bill">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+{% endblock body %}

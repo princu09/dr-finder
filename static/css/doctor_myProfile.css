@@ -1,0 +1,13 @@
+@media (max-width:991px) {
+    .appo-card {
+        margin: 0;
+        max-width: 23%;
+        padding: 10px;
+    }
+    .appo-card .card-body {
+        padding: 0.2rem;
+    }
+    .appo-card .h5 {
+        font-size: 0.8rem;
+    }
+}
