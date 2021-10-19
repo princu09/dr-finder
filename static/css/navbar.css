@@ -1,0 +1,21 @@
+@media (max-width:425px) {
+    .nav-contact {
+        font-size: 0.5rem;
+        position: absolute !important;
+        right: 0px !important;
+        top: 10px;
+    }
+    .navbar-toggler {
+        font-size: 0.8rem;
+    }
+    .login-btn {
+        margin-right: 10px;
+        font-size: 0.7rem;
+    }
+    .hospital-icon {
+        opacity: 0;
+    }
+    .contact-number {
+        display: none;
+    }
+}

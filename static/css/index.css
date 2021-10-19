@@ -47,16 +47,33 @@
     .available-features .h5 {
         font-size: 1rem;
     }
+    .footer {
+        padding: 5px !important;
+    }
+    .footer .col-md-3 {
+        max-width: 50%;
+        margin: 1rem 0;
+    }
     .footer .h4 {
         font-size: 1.3rem;
     }
     .footer .email {
         font-size: 0.75rem;
+        word-wrap: break-word;
     }
     .footer .phone {
         font-size: 0.9rem;
     }
     .footer p {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width:768px) {
+    .login-btn {
+        font-size: 0.8rem;
+    }
+    .nav-contact p {
         font-size: 0.8rem;
     }
 }

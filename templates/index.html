@@ -53,7 +53,7 @@
     <p class="h5" style="max-width:700px">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quod dicta et quia
         facilis repellat ducimus dolor iure tenetur quaerat optio?</p>
 
-    <div class="owl-carousel owl-theme container mt-3">
+    <div class="owl-carousel owl-theme container mt-3" id="clinic">
         <div class="item">
             <svg xmlns="http://www.w3.org/2000/svg" data-name="图层 1" viewBox="3 5 50 50" x="0px" y="0px">
                 <title>Urology</title>
@@ -113,7 +113,7 @@
 
 <div class="book-doctor px-3" style="padding: 50px 0">
     <div class="row">
-        <div class="col-md-3 text-white d-flex justify-content-center flex-column">
+        <div class="col-lg-4 col-sm-6 col-md-6 text-white d-flex justify-content-center flex-column">
             <p class="h1" style="font-weight:600">Book Our Doctor</p>
             <p class="h5">Lorem ipsum dolor sit amet.</p>
 
@@ -127,10 +127,10 @@
 
             <button class="btn btn-outline-info">Read More..</button>
         </div>
-        <div class="col-md-9">
-            <div class="owl-carousel owl-theme container-fluid mt-3 text-center" id="dr-finder">
+        <div class="col-lg-8 col-sm-6 col-md-6 d-flex align-items-center">
+            <div class="owl-carousel owl-theme container-fluid mt-3 text-center d-flex justify-content-center align-items-center" id="dr-finder">
                 {% for i in drData %}
-                <div class="item" style="width:300px">
+                <div class="item" style="width:250px">
                     <div class="card" style="width:18rem;">
                         <img src="media/{{i.userImg}}" height="250px" width="auto" alt="">
                         <div class="card-body">
@@ -167,35 +167,34 @@
     </div>
 </div>
 
-<div class="min-padding available-features d-flex flex-row justify-content-center align-items-center row px-3 m-0 p-0">
-
-    <div class="col-md-4">
-        <img src="{% static 'icons/chatting.svg' %}" alt="" style="width:20rem">
+<div class="available-features container px-3">
+    <div class="col-lg-4 col-xs-5 text-center">
+        <img src="{% static 'icons/chatting.svg' %}" alt="" style="width:15rem">
     </div>
-    <div class="col-md-8">
-        <p class="h1 font-weight-bold">Available Features in Our Clinic</p>
-        <p class="h5">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam ducimus quaerat tenetur
+    <div class="col-lg-8 col-xs-4">
+        <p class="h4 font-weight-bold">Available Features in Our Clinic</p>
+        <p class="h6">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam ducimus quaerat tenetur
             rerum
             harum asperiores?</p>
 
-        <div class="owl-carousel owl-theme container mt-3 text-center">
-            <div class="item">
+        <div class="owl-carousel owl-theme container mt-3" id="available-features">
+            <div class="item d-flex align-items-center flex-column">
                 <img src="{% static 'features/icu.jpg' %}" alt="">
                 <label for="ICU" class="font-weight-bold">ICU</label>
             </div>
-            <div class="item">
+            <div class="item d-flex align-items-center flex-column">
                 <img src="{% static 'features/medical.jpg' %}" alt="">
                 <label for="" class="font-weight-bold">Medical</label>
             </div>
-            <div class="item">
+            <div class="item d-flex align-items-center flex-column">
                 <img src="{% static 'features/operation.jpg' %}" alt="">
                 <label for="" class="font-weight-bold">Operation Room</label>
             </div>
-            <div class="item">
+            <div class="item d-flex align-items-center flex-column">
                 <img src="{% static 'features/patient ward.jpg' %}" alt="">
                 <label for="" class="font-weight-bold">Patient Ward</label>
             </div>
-            <div class="item">
+            <div class="item d-flex align-items-center flex-column">
                 <img src="{% static 'features/test room.jpg' %}" alt="">
                 <label for="" class="font-weight-bold">Test Room</label>
             </div>

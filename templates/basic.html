@@ -22,6 +22,10 @@
         <link rel="stylesheet" href="{% static 'css/doctor_myProfile.css' %}">
         <link rel="stylesheet" href="{% static 'css/healthCard.css' %}">
         <link rel="stylesheet" href="{% static 'css/myProfile.css' %}">
+        <link rel="stylesheet" href="{% static 'css/available-features.css' %}">
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+        <link rel="stylesheet" href="{% static 'css/doctor-invoice.css' %}">
+        <link rel="stylesheet" href="{% static 'css/patient_invoice.css' %}">
 
         <!-- Font Awesome -->
         <link rel="stylesheet" href="{% static 'font-awesome/css/all.css' %}">
@@ -81,9 +85,9 @@
                 </ul>
             </div>
 
-            <div class="d-flex align-items-center" style="position: absolute;right: 25px;top: 5px;">
-                <i class="far fa-hospital fa-2x mr-3" style="line-height:1.5"></i>
-                <div class="mr-3">
+            <div class="nav-contact d-flex align-items-center" style="position: absolute;right: 25px;top: 10px;">
+                <i class="far fa-hospital fa-2x mr-3 hospital-icon" style="line-height:1.5"></i>
+                <div class="mr-3 contact-number">
                     <p class="m-0">Contact</p>
                     <p class="m-0 font-weight-bold"><a href="tel:+919106693088">+91 91066 93088</a></p>
                 </div>
@@ -115,7 +119,7 @@
 
                 {% else %}
 
-                <a href="/login"><button class="btn btn-outline-info ml-3">Login / Signup</button></a>
+                <a href="/login"><button class="login-btn btn btn-outline-info ml-3">Login / Signup</button></a>
 
                 {% endif %}
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -132,7 +136,7 @@
 
 
         <div class="footer">
-            <div class="row">
+            <div class="row m-0 p-0">
                 <div class="col-md-3">
                     <p class="h4 font-weight-bold">For Patient</p>
                     <p class="m-1 mt-4"><i class="fas fa-chevron-right mr-1"></i> Search For Doctor</p>

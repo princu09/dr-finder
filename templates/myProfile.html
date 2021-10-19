@@ -9,11 +9,11 @@
   <div class="row">
     {% if user.fieldName == "Patient" %}
 
-    <div class="container col-lg-3 col-sm-4 mr-auto my-3">
+    <div class="container col-lg-3 col-sm-4 mr-auto my-3 d-flex justify-content-center">
       {% include './incFile/user_profile_menu.html' %}
     </div>
 
-    <div class="container col-lg-9 col-sm-8 my-3">
+    <div class="container col-lg-9 col-sm-8 my-3 m-0 p-0">
       <div class="container">
         {% if user.status == "pending" %}
         <h6 class="mb-4 text-center">
@@ -164,7 +164,7 @@
 
     {% elif user.fieldName == "Medical" %}
 
-    <div class="container col-lg-3 col-sm-4 mr-auto my-3">
+    <div class="container col-lg-3 col-sm-6 mr-auto my-3 d-flex justify-content-center">
       {% include './incFile/user_profile_menu.html' %}
     </div>
 

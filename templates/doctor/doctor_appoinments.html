@@ -11,7 +11,7 @@
 
 <div class="container-fluid my-4">
     <div class="row">
-        <div class="container col-lg-3 col-sm-4 mr-auto my-3">
+        <div class="container col-lg-3 col-sm-6 mr-auto my-3 d-flex justify-content-center">
             {% include '../incFile/doctor_profile_menu.html' %}
         </div>
         <div class="container col-lg-9 col-sm-8 my-3">
@@ -21,7 +21,7 @@
                 <h6 class="text-danger mb-4 text-center">Your status is now <span
                         class="text-uppercase">{{user.status}}</span></h6>
                 {% else %}
-                <div class="mt-5">
+                <div class="mt-5 appo-data">
                     <table id="table_id" class="display">
                         <thead>
                             <tr>

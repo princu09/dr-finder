@@ -1,13 +1,26 @@
 @media (max-width:991px) {
     .appo-card {
         margin: 0;
-        max-width: 23%;
         padding: 10px;
+    }
+    .appo-card {
+        max-width: 50%;
     }
     .appo-card .card-body {
         padding: 0.2rem;
     }
     .appo-card .h5 {
         font-size: 0.8rem;
+    }
+    .appo-data .nav-item {
+        font-size: 0.8rem;
+    }
+    .tab-content .tab-pane {
+        overflow: hidden;
+        overflow-x: scroll;
+    }
+    .appo-data {
+        overflow: hidden;
+        overflow-x: scroll;
     }
 }
