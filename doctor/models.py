@@ -22,6 +22,7 @@ class CustomUser(AbstractUser):
     city = models.CharField(max_length=250)
     state = models.CharField(max_length=250)
     status = models.CharField(max_length=50)
+    token = models.CharField(max_length=150)
     healthCard = models.BooleanField()
     healthCardAcceptByAdmin = models.BooleanField()
 

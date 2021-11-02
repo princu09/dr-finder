@@ -162,5 +162,8 @@ urlpatterns = [
      
      # Search Patient For Medical
      path('searchPatientMedical/', views.searchPatientMedical , name="Search Medical Patient"),
+     
+     # Verify Account
+     path('verify-account/<str:uid>', views.verifyAccount , name="Search Medical Patient"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

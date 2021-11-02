@@ -5,13 +5,13 @@ from django.contrib import messages
 # Create account
 from django.contrib.auth.models import User, auth
 # import Tables
-from doctor.models import CustomUser, HealthCard, BookAppoinment, Prescriptions , MedicalReports  , Bill
+from doctor.models import CustomUser, HealthCard, BookAppoinment, Prescriptions, MedicalReports, Bill
 # Login account
 from django.contrib.auth import authenticate, login, logout
 # Change Password
 from django.contrib.auth.forms import PasswordChangeForm
 # Gmail Request Add
-import smtplib
+from django.core.mail import send_mail
 # Import json
 from django.http import JsonResponse
 # For Search Query
@@ -25,6 +25,8 @@ from PayTm import Checksum
 # Date Time
 from django.utils.timezone import datetime
 from datetime import date
+import uuid
+from django.conf import settings
 
 # Merchant Key For Paytm
 MERCHANT_KEY = 'kbzk1DSbJiV_O3p5'
@@ -32,20 +34,21 @@ MERCHANT_KEY = 'kbzk1DSbJiV_O3p5'
 
 def index(request):
     drData = CustomUser.objects.filter(fieldName="Doctor")
-    return render(request, 'index.html' , context = {'drData' : drData})
+    return render(request, 'index.html', context={'drData': drData})
 
 
 def myProfile(request):
     if request.method == "POST":
         billNo = request.POST['billNo']
         billData = Bill.objects.filter(id=billNo)
-        context = {'billData' : billData}
+        context = {'billData': billData}
     userData = BookAppoinment.objects.filter(patientId=request.user.id)
     appo = Prescriptions.objects.filter(patientId=request.user.id)
     mediReport = MedicalReports.objects.filter(patientId=request.user.id)
     bill = Bill.objects.filter(patientId=request.user.id)
-    context = {'userData' : userData , 'appo': appo , 'mediReport' : mediReport , 'bill' : bill}
-    return render(request, 'myProfile.html' , context)
+    context = {'userData': userData, 'appo': appo,
+               'mediReport': mediReport, 'bill': bill}
+    return render(request, 'myProfile.html', context)
 
 
 def changeProfile(request, id):
@@ -139,10 +142,13 @@ def signup(request):
         email = request.POST['email']
         pswd = request.POST['pswd']
         status = "pending"
+        uid = uuid.uuid4()
 
         user = CustomUser.objects.create_user(
-            username=usrName, first_name=fname, last_name=lname, email=email, password=pswd, fieldName=post, status=status, healthCard=False, healthCardAcceptByAdmin=False, amount=0)
+            username=usrName, first_name=fname, last_name=lname, email=email, password=pswd, fieldName=post, status=status, healthCard=False, healthCardAcceptByAdmin=False, amount=0, token=uid)
         user.save()
+
+        send_mail('Dr.Finder Account Verification Mail', f'This is verification email , please verify your account using the link http://127.0.0.1:8000/verify-account/{uid}' , 'pmkvyprince@gmail.com' , [email] , fail_silently=False)
 
         user = authenticate(username=usrName, password=pswd)
 
@@ -359,14 +365,14 @@ def searchQuery(request):
                 mobile__contains=query) | Q(dob__contains=query) | Q(bloodGroup__contains=query) | Q(address__contains=query) | Q(city__contains=query) | Q(state__contains=query)).filter(fieldName="Hospital")
 
             hpQ = len(hospitalQ)
-            
+
             medicalQ = CustomUser.objects.filter(Q(first_name__contains=query) | Q(last_name__contains=query) | Q(username__contains=query) | Q(email__contains=query) | Q(
                 mobile__contains=query) | Q(dob__contains=query) | Q(bloodGroup__contains=query) | Q(address__contains=query) | Q(city__contains=query) | Q(state__contains=query)).filter(fieldName="Medical")
 
             mediQ = len(medicalQ)
 
             context = {'query': query, 'doctorQ': doctorQ, 'dcQ': dcQ,
-                       'patientsQ': patientsQ, 'ptQ': ptQ, 'hospitalQ': hospitalQ, 'hpQ': hpQ , 'mediQ' : mediQ , 'medicalQ' : medicalQ}
+                       'patientsQ': patientsQ, 'ptQ': ptQ, 'hospitalQ': hospitalQ, 'hpQ': hpQ, 'mediQ': mediQ, 'medicalQ': medicalQ}
 
             return render(request, 'adminSite/search.html', context)
         else:
@@ -426,11 +432,14 @@ def searchDoctor_patient(request):
 def doctor_profile(request):
     today = date.today()
     currentUser = request.user.id
-    bookAppo = BookAppoinment.objects.filter(doctorId=currentUser).filter(approve=True)
-    
-    pendingAppo = BookAppoinment.objects.filter(doctorId=currentUser).filter(approve=True).filter(complateAppoinment=False)
+    bookAppo = BookAppoinment.objects.filter(
+        doctorId=currentUser).filter(approve=True)
 
-    todayAppo = BookAppoinment.objects.filter(doctorId=currentUser).filter(approve=True).filter(complateAppoinment=False).filter(date=today)
+    pendingAppo = BookAppoinment.objects.filter(doctorId=currentUser).filter(
+        approve=True).filter(complateAppoinment=False)
+
+    todayAppo = BookAppoinment.objects.filter(doctorId=currentUser).filter(
+        approve=True).filter(complateAppoinment=False).filter(date=today)
 
     upcomingAppo = BookAppoinment.objects.filter(doctorId=currentUser).filter(
         approve=True).filter(complateAppoinment=False).exclude(date=today)
@@ -519,9 +528,11 @@ def doctorChangePass(request):
 def bookAppoinment(request, pId, dId):
     if request.user.fieldName == "Doctor":
         return redirect('/')
-    doctorDetails = CustomUser.objects.filter(id=dId).filter(fieldName="Doctor")
+    doctorDetails = CustomUser.objects.filter(
+        id=dId).filter(fieldName="Doctor")
 
-    patientDetails = CustomUser.objects.filter(id=pId).filter(fieldName="Patient")
+    patientDetails = CustomUser.objects.filter(
+        id=pId).filter(fieldName="Patient")
 
     context = {'d': doctorDetails, 'p': patientDetails}
 
@@ -531,7 +542,8 @@ def bookAppoinment(request, pId, dId):
         name = f"{hcNo[0].userFName} {hcNo[0].userLName}"
         amount = doctorDetails[0].amount
 
-        b = BookAppoinment(hcNo=hcNo[0].hcNo, date=date, payment=False, doctorId=dId, patientName=name, approve=False, time="00:00:00", complateAppoinment=False, amount=amount, patientId=pId)
+        b = BookAppoinment(hcNo=hcNo[0].hcNo, date=date, payment=False, doctorId=dId, patientName=name,
+                           approve=False, time="00:00:00", complateAppoinment=False, amount=amount, patientId=pId)
 
         b.save()
 
@@ -582,7 +594,8 @@ def doctor_myPatients(request, id):
             if i not in hcUserList:
                 hcUserList.add(i[0].userId)
 
-        getUserData = [CustomUser.objects.filter(id=item) for item in hcUserList]
+        getUserData = [CustomUser.objects.filter(
+            id=item) for item in hcUserList]
         patientNewList = []
         for i in getUserData:
             patientNewList.append(i[0])
@@ -595,6 +608,7 @@ def doctor_myPatients(request, id):
     except:
         pass
     return render(request, 'doctor/doctor_patients.html')
+
 
 def acceptAppoinment(request, docId):
     if request.method == "POST":
@@ -704,11 +718,13 @@ def doctor_patient_dashboard(request, pId, appoId):
 
     prescriptions = Prescriptions.objects.filter(appoId=appoId)
 
-    mediReport = MedicalReports.objects.filter(appoId=appoId).filter(patientId=pId)
+    mediReport = MedicalReports.objects.filter(
+        appoId=appoId).filter(patientId=pId)
 
     bill = Bill.objects.filter(patientId=pId)
 
-    context = {'userData': userData, 'hc': hc, 'appo': appo, 'pId': pId, 'prescriptions': prescriptions , 'appoId' : appoId , 'mediReport' : mediReport , 'bill' : bill}
+    context = {'userData': userData, 'hc': hc, 'appo': appo, 'pId': pId,
+               'prescriptions': prescriptions, 'appoId': appoId, 'mediReport': mediReport, 'bill': bill}
 
     return render(request, 'doctor/doctor_patient_dashboard.html', context)
 
@@ -726,23 +742,24 @@ def addPrescriptions(request, id, uId):
             n = data[0].tblName
             for i in range(len(name)):
                 n.append(name[i])
-            
+
             q = data[0].qty
             for i in range(len(qty)):
                 q.append(qty[i])
-            
+
             d = data[0].days
             for i in range(len(days)):
                 d.append(days[i])
-            
+
             t = data[0].tblTime
             for i in range(len(tblTime)):
                 t.append(tblTime[i])
-            
-            data.update(tblName=n , qty=q , days=d , tblTime=t)
+
+            data.update(tblName=n, qty=q, days=d, tblTime=t)
             return redirect(f'/doctor_patient_dashboard/{uId}/{id}')
         else:
-            u = Prescriptions.objects.create(appoId=id, tblName=name, qty=qty, days=days, tblTime=tblTime , patientId=uId)
+            u = Prescriptions.objects.create(
+                appoId=id, tblName=name, qty=qty, days=days, tblTime=tblTime, patientId=uId)
             u.save()
             return redirect(f'/doctor_patient_dashboard/{uId}/{id}')
 
@@ -770,13 +787,13 @@ def viewPrescription(request, id):
     for i in range(len(userData[0].tblName)):
         tblTime.append(userData[0].tblTime[i])
 
-    myList = zip(dataName , dataQty , dataDays , tblTime)
+    myList = zip(dataName, dataQty, dataDays, tblTime)
 
-    context = {'userData': userData, 'myList' : myList}
+    context = {'userData': userData, 'myList': myList}
     return render(request, 'doctor/view_prescription.html', context)
 
 
-def addMedicalRecords(request , pId , appoId):
+def addMedicalRecords(request, pId, appoId):
     if request.method == "POST" and request.FILES['report']:
         date = request.POST['date']
         desc = request.POST['desc']
@@ -785,13 +802,14 @@ def addMedicalRecords(request , pId , appoId):
         filename = fs.save(report.name, report)
         uploaded_file_url = fs.url(filename)
 
-        m = MedicalReports.objects.create(appoId=appoId , patientId=pId , date=date , desc=desc , report=report)
+        m = MedicalReports.objects.create(
+            appoId=appoId, patientId=pId, date=date, desc=desc, report=report)
         m.save()
 
     return redirect(f'/doctor_patient_dashboard/{pId}/{appoId}')
 
 
-def createBill(request , pId , appoId):
+def createBill(request, pId, appoId):
     if request.method == "POST":
         date = request.POST['date']
         billName = request.POST.getlist('billName')
@@ -808,39 +826,47 @@ def createBill(request , pId , appoId):
         hc = HealthCard.objects.filter(userId=pId)
         hc = hc[0].hcNo
 
-        createBill = Bill.objects.create(patientId=pId , patientName=name , doctorId=docId , doctorName=docName , date=date , hc=hc  , itemName=billName , itemBill=bill , totalBill=sum , appoId=appoId)
+        createBill = Bill.objects.create(patientId=pId, patientName=name, doctorId=docId, doctorName=docName,
+                                         date=date, hc=hc, itemName=billName, itemBill=bill, totalBill=sum, appoId=appoId)
         createBill.save()
 
-        BookAppoinment.objects.filter(bookId=appoId).update(complateAppoinment=True)
+        BookAppoinment.objects.filter(
+            bookId=appoId).update(complateAppoinment=True)
 
         return redirect(f'/doctor_patient_dashboard/{pId}/{appoId}')
 
 
-def viewBill(request , id):
+def viewBill(request, id):
     billData = Bill.objects.filter(id=id)
 
     iName = []
     for i in range(len(billData[0].itemName)):
         iName.append(billData[0].itemName[i])
-    
+
     iItem = []
     for i in range(len(billData[0].itemBill)):
         iItem.append(billData[0].itemBill[i])
 
-    myList = zip(iName , iItem)
+    myList = zip(iName, iItem)
 
-    return render(request, 'doctor/view_Bill.html' , context={'billData' : billData , 'myList' : myList})
+    return render(request, 'doctor/view_Bill.html', context={'billData': billData, 'myList': myList})
 
 
 def doctor_invoice(request):
     billData = Bill.objects.filter(doctorId=request.user.id)
-    return render(request, 'doctor/doctor_invoice.html' , context={'billData' : billData})
+    return render(request, 'doctor/doctor_invoice.html', context={'billData': billData})
 
 
 def invoice(request):
     bill = Bill.objects.filter(patientId=request.user.id)
-    return render(request , 'invoice.html' , context={'bill' : bill})
+    return render(request, 'invoice.html', context={'bill': bill})
 
 
 def searchPatientMedical(request):
     return render(request, 'searchPatientMedical.html')
+
+
+
+def verifyAccount(request , uid):
+    CustomUser.objects.filter(token=uid).update(status="success")
+    return redirect('/')

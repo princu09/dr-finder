@@ -17,11 +17,11 @@ class CustomUserAdmin(UserAdmin):
 
     add_fieldsets = UserAdmin.add_fieldsets + (
         (None, {'fields': ('email', 'first_name', 'last_name', 'fieldName', 'gender',
-                           'mobile', 'dob' , 'bloodGroup', 'address', 'city', 'state', 'status' ,'healthCard', 'healthCardAcceptByAdmin', 'userImg',)}),
+                           'mobile', 'dob' , 'bloodGroup', 'address', 'city', 'state', 'status' ,'healthCard', 'healthCardAcceptByAdmin', 'userImg', 'token' ,)}),
     )
     fieldsets = UserAdmin.fieldsets + (
         (None, {'fields': ('fieldName', 'gender', 'mobile',
-                           'dob', 'bloodGroup', 'address', 'city', 'state', 'status' ,'healthCard','healthCardAcceptByAdmin', 'userImg',)}),)
+                           'dob', 'bloodGroup', 'address', 'city', 'state', 'status' ,'healthCard','healthCardAcceptByAdmin', 'userImg', 'token')}),)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

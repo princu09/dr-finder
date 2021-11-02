@@ -7,8 +7,7 @@
     <p class="h4 font-weight-bold text-center text-info my-5">Complate Appoinment</p>
     {% if user.status == "pending" %}
     <h6 class="mb-4 text-center">Your Profile is now <span class="text-danger text-uppercase">{{user.status}}</span> ,
-        Wait for Accept Your Profile
-        Request.</h6>
+        check your email and verify account to access this site.</h6>
     {% else %}
     <div class="row">
         {% for i , j in myList %}
