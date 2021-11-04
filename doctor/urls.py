@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import csrf_exempt
 from . import views
 from django.contrib import admin
 from django.urls import path, include
@@ -10,7 +11,7 @@ from django.conf.urls import url
 urlpatterns = [
 
      # Basic Page For Everyone
-     path('', views.index, name="Main Page"),
+     url(r'^$', views.index, name="Main Page"),
      path('myProfile', views.myProfile, name="myProfile Page"),
 
      # Change Profile For Patient & Medical
@@ -48,30 +49,6 @@ urlpatterns = [
 
      # Delete User
      path('delUser/<int:id>', views.delUser, name="Delete User"),
-
-     # Apply Health Card
-     path('healthCard/', views.healthCard, name="healthCard Page"),
-
-     # Update Health Card
-     path('hcUpdate/<int:id>', views.hcUpdate, name="healthCard Update Page"),
-
-     # All Health Card
-     path('allHC', views.allHC, name="All Cards"),
-
-     # Pending Health Card
-     path('pendingHC', views.pendingHC, name="Pending Health Card"),
-
-     # View Health Card
-     path('viewHealthCard/<int:id>', views.viewHealthCard, name="View Health Card"),
-
-     # Accept Health Card
-     path('acceptHC/<int:id>', views.acceptHC, name="Accept Health Card"),
-
-     # Reject Health Card
-     path('rejectHC/<int:id>', views.rejectHC, name="Reject Health Card"),
-
-     # Delete Health Card
-     path('delHC/<int:id>/', views.delHC, name="Delete HC"),
 
      # Admin Doctors List
      path('admin_doctors', views.admin_doctors, name="admin doctors"),
@@ -165,5 +142,10 @@ urlpatterns = [
      
      # Verify Account
      path('verify-account/<str:uid>', views.verifyAccount , name="Search Medical Patient"),
+
+     # Add Patient By Doctor
+     path('add-patient-by-doctor', views.addPatientByDoctor , name="Add Patient By Doctor"),
+
+     path('authenticate-username', views.validateUsername , name="Add Patient By Doctor"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

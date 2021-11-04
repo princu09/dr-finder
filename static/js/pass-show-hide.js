@@ -1,5 +1,5 @@
-const passField = document.querySelector(".field input[type='password'] "),
-    toogleBtn = document.querySelector(".field i");
+var toogleBtn = document.querySelector(".field i");
+var passField = document.querySelector(".field input[type='password']");
 
 toogleBtn.onclick = () => {
     if (passField.type == "password") {

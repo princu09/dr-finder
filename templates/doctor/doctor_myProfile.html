@@ -88,10 +88,17 @@
                 <p class="h4 mb-5 text-center">Patients Appoinments</p>
                 <div class="col-md-12 col-xs-12 d-flex justify-content-center">
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="mr-2 nav-item rounded" role="presentation">
+                            <a class="nav-link active" id="add-appoinments-tab" data-toggle="pill"
+                                href="#add-appoinments" role="tab" aria-controls="add-appoinments" aria-selected="false"
+                                style="border-radius:50px">
+                                <i class="far fa-calendar-check"></i> Add Patient
+                            </a>
+                        </li>
                         <li class="mr-2 nav-item" role="presentation">
-                            <a class="nav-link active" id="today-appoinments-tab" data-toggle="pill"
-                                href="#today-appoinments" role="tab" aria-controls="today-appoinments"
-                                aria-selected="true" style="border-radius:50px">
+                            <a class="nav-link" id="today-appoinments-tab" data-toggle="pill" href="#today-appoinments"
+                                role="tab" aria-controls="today-appoinments" aria-selected="true"
+                                style="border-radius:50px">
                                 <i class="fas fa-calendar-day"></i>
                                 Today</a>
                         </li>
@@ -106,7 +113,32 @@
                 </div>
 
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="today-appoinments" role="tabpanel"
+                    <div class="tab-pane fade show active" id="add-appoinments" role="tabpanel"
+                        aria-labelledby="add-appoinments-tab">
+                        <div class="my-5 pb-4 container col-md-8">
+                            <form action="add-patient-by-doctor" method="POST">
+                            {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="">First Name</label>
+                                        <input type="text" class="form-control" name="fname">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="">Last Name</label>
+                                        <input type="text" class="form-control" name="lname">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Mobile Number</label>
+                                    <input type="text" class="form-control" name="mobile">
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-outline-info">Add Patient</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="today-appoinments" role="tabpanel"
                         aria-labelledby="today-appoinments-tab">
                         <div class="mt-5">
                             <table id="table_id" class="display">

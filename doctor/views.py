@@ -1,11 +1,12 @@
 # Page Redirect , Request Page , Response Page
+import json
 from django.shortcuts import render, HttpResponse, redirect
 # Showing Message alert on Main Page
 from django.contrib import messages
 # Create account
 from django.contrib.auth.models import User, auth
 # import Tables
-from doctor.models import CustomUser, HealthCard, BookAppoinment, Prescriptions, MedicalReports, Bill
+from doctor.models import CustomUser, BookAppoinment, Prescriptions, MedicalReports, Bill
 # Login account
 from django.contrib.auth import authenticate, login, logout
 # Change Password
@@ -19,7 +20,7 @@ from django.db.models import Q
 # Store User Image
 from django.core.files.storage import FileSystemStorage
 # CSRF Token
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt , csrf_protect
 # Paytm Gateway
 from PayTm import Checksum
 # Date Time
@@ -139,22 +140,36 @@ def signup(request):
         fname = request.POST['fname']
         lname = request.POST['lname']
         usrName = request.POST['usrname']
+        mobile = request.POST['mobile']
         email = request.POST['email']
-        pswd = request.POST['pswd']
+        password = request.POST['pass']
         status = "pending"
         uid = uuid.uuid4()
 
-        user = CustomUser.objects.create_user(
-            username=usrName, first_name=fname, last_name=lname, email=email, password=pswd, fieldName=post, status=status, healthCard=False, healthCardAcceptByAdmin=False, amount=0, token=uid)
-        user.save()
+        checkQuery2 = CustomUser.objects.filter(mobile=mobile).exists()
+        if checkQuery2 == True:
+            CustomUser.objects.filter(mobile=mobile).update(username=usrName, first_name=fname, last_name=lname, email=email, fieldName=post, status=status, amount=0, token=uid , createdByUser=True)
+            a = CustomUser.objects.get(mobile=mobile)
+            a.set_password(password)
+            a.save()
 
-        send_mail('Dr.Finder Account Verification Mail', f'This is verification email , please verify your account using the link http://127.0.0.1:8000/verify-account/{uid}' , 'pmkvyprince@gmail.com' , [email] , fail_silently=False)
+                
+            user = authenticate(username=usrName, password=password)
+            if user is not None:
+                login(request, user)
+                send_mail('Dr.Finder Account Verification Mail', f'This is verification email , please verify your account using the link http://127.0.0.1:8000/verify-account/{uid}', 'pmkvyprince@gmail.com', [email], fail_silently=False)
+                return redirect('/')                
 
-        user = authenticate(username=usrName, password=pswd)
+        else:
+            u = CustomUser.objects.create_user(username=usrName, first_name=fname, last_name=lname,email=email, password=str(password), fieldName=post,mobile=mobile, status=status, amount=0, token=uid,createdByUser=True)
+            u.save()
 
-        if user is not None:
-            login(request, user)
-            return redirect('/')
+            user = authenticate(username=usrName, password=password)
+            if user is not None:
+                login(request, user)
+
+                send_mail('Dr.Finder Account Verification Mail', f'This is verification email , please verify your account using the link http://127.0.0.1:8000/verify-account/{uid}', 'pmkvyprince@gmail.com', [email], fail_silently=False)
+                return redirect('/')       
 
     return render(request, 'signup.html')
 
@@ -185,6 +200,7 @@ def rejectProfile(request, id):
 
 
 def adminSite(request):
+    print(request.user)
     getUserData = CustomUser.objects.all()
     getDoctor = CustomUser.objects.filter(fieldName="Doctor").count()
     getPatients = CustomUser.objects.filter(fieldName="Patient").count()
@@ -206,68 +222,6 @@ def delUser(request, id):
         user = CustomUser.objects.get(id=id)
         user.delete()
     return redirect('/allUser')
-
-
-def healthCard(request):
-    return render(request, 'healthCard.html')
-
-
-def hcUpdate(request, id):
-    if request.method == "POST":
-        user = CustomUser.objects.filter(id=id).update(healthCard=True)
-
-        uId = request.POST['uId']
-        uFName = request.POST['uFName']
-        uLName = request.POST['uLName']
-
-        hcCreate = HealthCard(userId=uId, userFName=uFName, userLName=uLName)
-
-        hcCreate.save()
-    return redirect('/healthCard')
-
-
-def allHC(request):
-    getUserData = HealthCard.objects.all()
-    context = {'userData': getUserData}
-    return render(request, 'adminSite/allHC.html', context)
-
-
-def pendingHC(request):
-    getUserData = CustomUser.objects.filter(
-        healthCard=True, healthCardAcceptByAdmin=False)
-    context = {'userData': getUserData}
-    return render(request, 'adminSite/pendingHC.html', context)
-
-
-def viewHealthCard(request, id):
-    getUserData = HealthCard.objects.filter(userId=id)
-    context = {'userData': getUserData}
-    return render(request, 'viewHealthCard.html', context)
-
-
-def acceptHC(request, id):
-    if request.method == "POST":
-        user = CustomUser.objects.filter(
-            id=id).update(healthCardAcceptByAdmin=True)
-    return redirect('/pendingHC')
-
-
-def rejectHC(request, id):
-    if request.method == "POST":
-        user = CustomUser.objects.filter(id=id).update(healthCard=False)
-        delHC = HealthCard.objects.filter(userId=id)
-        delHC.delete()
-    return redirect('/pendingHC')
-
-
-def delHC(request, id):
-    if request.method == "POST":
-        u = HealthCard.objects.get(userId=id)
-        u.delete()
-        user = CustomUser.objects.filter(id=id).update(healthCard=False)
-        user2 = CustomUser.objects.filter(
-            id=id).update(healthCardAcceptByAdmin=False)
-    return redirect('/allHC')
 
 
 def admin_doctors(request):
@@ -302,10 +256,9 @@ def admin_reports(request):
 
 def admin_patients_search(request):
     if request.is_ajax():
-        hcNo = request.GET.get('hcNo')
+        mobile = request.GET.get('mobile')
 
-        getData = HealthCard.objects.get(hcNo=hcNo)
-        getUserData = CustomUser.objects.get(id=getData.userId)
+        getUserData = CustomUser.objects.get(mobile=mobile)
         # User Data
         fName = getUserData.first_name
         lName = getUserData.last_name
@@ -318,19 +271,13 @@ def admin_patients_search(request):
         city = getUserData.city
         state = getUserData.state
         status = getUserData.status
-        healthCard = getUserData.healthCard
-        healthCardAcceptByAdmin = getUserData.healthCardAcceptByAdmin
         date_joined = getUserData.date_joined
         staff = getUserData.is_staff
         superUser = getUserData.is_superuser
-        # Health Card Data
-        uID = getData.userId
-        hcNo = getData.hcNo
+
         return JsonResponse({
             'fName': fName,
             'lName': lName,
-            'uID': uID,
-            'hcNo': hcNo,
             'last_login': last_login,
             'dob': dob,
             'mobile': mobile,
@@ -340,8 +287,6 @@ def admin_patients_search(request):
             'city': city,
             'state': state,
             'status': status,
-            'healthCard': healthCard,
-            'healthCardAcceptByAdmin': healthCardAcceptByAdmin,
             'date_joined': date_joined,
             'staff': staff,
             'superUser': superUser,
@@ -537,12 +482,11 @@ def bookAppoinment(request, pId, dId):
     context = {'d': doctorDetails, 'p': patientDetails}
 
     if request.method == "POST":
+        name = request.user.first_name + " " + request.user.last_name
         date = request.POST['date']
-        hcNo = HealthCard.objects.filter(userId=pId)
-        name = f"{hcNo[0].userFName} {hcNo[0].userLName}"
         amount = doctorDetails[0].amount
 
-        b = BookAppoinment(hcNo=hcNo[0].hcNo, date=date, payment=False, doctorId=dId, patientName=name,
+        b = BookAppoinment(date=date, payment=False, doctorId=dId, patientName=name,
                            approve=False, time="00:00:00", complateAppoinment=False, amount=amount, patientId=pId)
 
         b.save()
@@ -579,35 +523,12 @@ def doctor_appoinments(request, id):
 
 
 def doctor_myPatients(request, id):
-    userData = BookAppoinment.objects.filter(
-        doctorId=id).filter(complateAppoinment=True)
-    getHCData = [HealthCard.objects.filter(
-        hcNo=item.hcNo) for item in userData]
-
-    try:
-        hcNewList = []
-        for i in getHCData:
-            hcNewList.append(i[0])
-
-        hcUserList = set()
-        for i in getHCData:
-            if i not in hcUserList:
-                hcUserList.add(i[0].userId)
-
-        getUserData = [CustomUser.objects.filter(
-            id=item) for item in hcUserList]
-        patientNewList = []
-        for i in getUserData:
-            patientNewList.append(i[0])
-
-        myList = zip(patientNewList, hcNewList)
-
-        context = {'myList': myList}
-        return render(request, 'doctor/doctor_patients.html', context)
-
-    except:
-        pass
-    return render(request, 'doctor/doctor_patients.html')
+    bookData = BookAppoinment.objects.filter(doctorId=id).filter(complateAppoinment=True)
+    userId = []
+    for i in bookData:
+        a = CustomUser.objects.get(id=i.patientId)
+        userId.append(a)
+    return render(request, 'doctor/doctor_patients.html' , context={'userId':userId})
 
 
 def acceptAppoinment(request, docId):
@@ -712,7 +633,6 @@ def history_appoinment(request):
 
 def doctor_patient_dashboard(request, pId, appoId):
     userData = CustomUser.objects.filter(id=pId)
-    hc = HealthCard.objects.filter(userId=pId)
 
     appo = BookAppoinment.objects.filter(bookId=appoId)
 
@@ -723,7 +643,7 @@ def doctor_patient_dashboard(request, pId, appoId):
 
     bill = Bill.objects.filter(patientId=pId)
 
-    context = {'userData': userData, 'hc': hc, 'appo': appo, 'pId': pId,
+    context = {'userData': userData, 'appo': appo, 'pId': pId,
                'prescriptions': prescriptions, 'appoId': appoId, 'mediReport': mediReport, 'bill': bill}
 
     return render(request, 'doctor/doctor_patient_dashboard.html', context)
@@ -823,11 +743,9 @@ def createBill(request, pId, appoId):
         name = patientData[0].first_name + " " + patientData[0].last_name
         docId = request.user.id
         docName = request.user.first_name + " " + request.user.last_name
-        hc = HealthCard.objects.filter(userId=pId)
-        hc = hc[0].hcNo
 
         createBill = Bill.objects.create(patientId=pId, patientName=name, doctorId=docId, doctorName=docName,
-                                         date=date, hc=hc, itemName=billName, itemBill=bill, totalBill=sum, appoId=appoId)
+                                         date=date, itemName=billName, itemBill=bill, totalBill=sum, appoId=appoId)
         createBill.save()
 
         BookAppoinment.objects.filter(
@@ -866,7 +784,47 @@ def searchPatientMedical(request):
     return render(request, 'searchPatientMedical.html')
 
 
-
-def verifyAccount(request , uid):
+def verifyAccount(request, uid):
     CustomUser.objects.filter(token=uid).update(status="success")
     return redirect('/')
+
+
+def addPatientByDoctor(request):
+    if request.method == "POST":
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        mobile = request.POST['mobile']
+        usrname = uuid.uuid4()
+
+        checkQuery = CustomUser.objects.filter(mobile=mobile).exists()
+        if checkQuery == True:
+            pass
+        else:
+            u = CustomUser.objects.create(username=usrname, first_name=fname, last_name=lname,
+                                          fieldName="Patient", status="pending", mobile=mobile, amount=0)
+            u.save()
+
+        uId = CustomUser.objects.get(mobile=mobile)
+        uId = uId.id
+
+        dId = request.user.id
+        amount = request.user.amount
+
+        name = fname + " " + lname
+        time = datetime.now().strftime('%H:%M:%S')
+
+        b = BookAppoinment.objects.create(date=date.today(), payment=True, doctorId=dId, patientName=name,
+                                          approve=True, time=time, complateAppoinment=True, patientId=uId, amount=amount)
+
+        bId = BookAppoinment.objects.filter(doctorId=dId).last()
+        bId = bId.bookId
+        return redirect(f'/doctor_patient_dashboard/{uId}/{bId}')
+
+@csrf_exempt
+def validateUsername(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        username = data["username"]
+        if CustomUser.objects.filter(username=username).exists():
+            return JsonResponse({"username_error" : "Sorry Username is already exists."}, status=409)
+        return JsonResponse({"username_valid" : True})

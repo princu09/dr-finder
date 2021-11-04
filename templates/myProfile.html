@@ -175,8 +175,9 @@
           <span class="text-danger text-uppercase">{{user.status}}</span> , check your email and verify account to access this site.
         </h6>
         {% else %}
+
         <!-- Page Heading -->
-        <form class="hcSearch2 d-flex my-4" action="" method="POST">
+        <form class="d-flex my-4" action="" method="POST">
           {% csrf_token %}
           <input class="form-control" type="search" name="billNo" placeholder="Enter Bill No"
             style="border-radius: 50px !important;font-size:1rem" required>

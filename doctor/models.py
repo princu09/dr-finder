@@ -23,8 +23,7 @@ class CustomUser(AbstractUser):
     state = models.CharField(max_length=250)
     status = models.CharField(max_length=50)
     token = models.CharField(max_length=150)
-    healthCard = models.BooleanField()
-    healthCardAcceptByAdmin = models.BooleanField()
+    createdByUser = models.BooleanField()
 
     class meta:
         ordering = ['last_name']
@@ -33,25 +32,11 @@ class CustomUser(AbstractUser):
         return self.fieldName
 
 
-class HealthCard(models.Model):
-    userId = models.IntegerField(null=False)
-    userFName = models.CharField(null=False, max_length=500)
-    userLName = models.CharField(null=False, max_length=500)
-    try:
-        hcNo = models.IntegerField(default=randint(400000000000, 500000000000), unique=True, editable=False)
-    except:
-        pass
-
-    def __str__(self):
-        return str(self.hcNo)
-
-
 class BookAppoinment(models.Model):
     bookId = models.AutoField(primary_key=True)
     patientId = models.IntegerField()
     patientName = models.CharField(max_length=300)
     doctorId = models.IntegerField()
-    hcNo = models.IntegerField()
     date = models.DateField(auto_now=False, auto_now_add=False, null=False)
     payment = models.BooleanField()
     approve = models.BooleanField()
@@ -60,7 +45,7 @@ class BookAppoinment(models.Model):
     amount = models.IntegerField()
 
     def __str__(self):
-        return "Booking ID : " + str(self.bookId) + " | " + str(self.hcNo)
+        return "Booking ID : " + str(self.bookId)
 
 
 class Prescriptions(models.Model):
@@ -94,7 +79,6 @@ class Bill(models.Model):
     doctorId = models.IntegerField()
     doctorName = models.CharField(max_length=500)
     date = models.DateField(auto_now=False, auto_now_add=False)
-    hc = models.IntegerField()
     itemName = jsonfield.JSONField()
     itemBill = jsonfield.JSONField()
     totalBill = models.IntegerField()

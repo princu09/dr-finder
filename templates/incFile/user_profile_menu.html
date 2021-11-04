@@ -15,10 +15,6 @@
         {% if user.fieldName == "Patient" %}
         <li class="list-group-item"><a href="/myProfile" {% if "myProfile" in request.path %}class="text-info"
                 {% endif %}><i class="mr-2 fas fa-columns"></i> Dashboard</a></li>
-        <li class="list-group-item">
-            <a href="/healthCard" {% if "healthCard" in request.path %}class="text-info" {% endif %}><i
-                    class="mr-2 fas fa-file-medical"></i> Health Card</a>
-        </li>
         <li class="list-group-item"><a href="/changeProfile/{{user.id}}"
                 {% if "changeProfile" in request.path %}class="text-info" {% endif %}><i
                     class="mr-2 fas fa-user-cog"></i> Profile Setting</a></li>

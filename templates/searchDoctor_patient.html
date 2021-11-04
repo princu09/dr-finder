@@ -6,7 +6,7 @@
 <div class="container">
     <p class="h4 font-weight-bold text-center text-info my-5">Search Doctor</p>
 
-    {% if user.healthCardAcceptByAdmin %}
+    {% if user.status == "success" %}
     <div class="card mb-4 border-left-info">
         <div class="card-body">
             <form action="" method="POST">
@@ -45,15 +45,6 @@
         </div>
 
     </div>
-    {% else %}
-
-    <div class="text-center" style="min-height: 50vh;">
-        <p class="text-center h5 mb-5 font-weight-bold text-danger">First You Need a Health Card Please Go To HealthCard
-            Page
-            and Apply For Health Card.</p>
-        <a href="healthCard/"><button class="btn btn-sm btn-outline-success">Apply For Health Card</button></a>
-    </div>
-
     {% endif %}
 
     {% for i in queryset %}
